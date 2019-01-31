@@ -14,3 +14,6 @@ This project intends to serve as a useful web interface for keeping track of you
 * [x] An aesthetic background ;)
 * [ ] Improve UI
 * [ ] Find high quality image assets
+
+## Progress
+![screenshot](https://lh3.googleusercontent.com/8rMKc_hphfh60Noxa21FCHh8lldoODLrTdmbbessnTqD1RQUJX7sszNn7Jp68cLVYZJ3Uq5mMIDRVyPVgsFPgiNGzpISf521-8BJYPfEViqBxWd9x7SYlLvSrLOqZOYR4-1AIxl36j8=w1768-h902-no)
