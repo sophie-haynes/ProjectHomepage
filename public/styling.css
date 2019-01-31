@@ -1,0 +1,82 @@
+body{
+    background-image: url('/resources/bg.gif');
+    background-size: cover;
+}
+
+.content-section{
+	background-color:rgba(0, 0, 0, 0.5)
+}
+
+@font-face {
+    font-family: 'personified_uxregular';
+    src: url('resources/text/personifieduxregular-webfont.woff2') format('woff2'),
+         url('resources/text/personifieduxregular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+ul{
+	font-family: 'personified_uxregular';
+    src: url('resources/text/personifieduxregular-webfont.woff2') format('woff2'),
+         url('resources/text/personifieduxregular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.btn{
+	font-family: 'personified_uxregular';
+    src: url('resources/text/personifieduxregular-webfont.woff2') format('woff2'),
+         url('resources/text/personifieduxregular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'earwig_factoryregular';
+    src: url('resources/text/earwig_factory_rg-webfont.woff2') format('woff2'),
+         url('resources/text/earwig_factory_rg-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+.calling-text{
+	text-align: center;
+	font-family: 'earwig_factoryregular';
+	font-size: 500%;
+	color:white;
+}
+.calling-text span{
+	color: red;
+	background-color:rgba(0, 0, 0, 0.7);
+	padding-left: 0.12em;
+	padding-right: 0.12em;
+}
+
+h2.calling-text{
+	font-size: 350%;
+}
+
+.task-list-title{
+	
+}
+
+.task-list-title h3{
+	background-image: url('/resources/textboxes/text-left-1.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	overflow:auto; 
+    padding-top: 1.2em;
+	padding-bottom: 1.2em;
+	color:#fffd61;
+}
+
+.subtasks li{ 
+	
+	color:white;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+

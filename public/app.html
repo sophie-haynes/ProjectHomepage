@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Project Homepage</title>
+    <meta charset="utf-8" />
+    d>
+    <link rel="stylesheet" href="styling.css">
+    <link rel="stylesheet" href="normalise.css">
+    <!-- Import jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <!-- Import bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <!-- import popper.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <!-- import jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+      <h1 class="calling-text"> <span>Project Tracking</span></h1>
+        <div class="row">
+            <div class="col text-center content-section" id="task-pane">
+              
+                  <h2 class="calling-text">Tasks</h2>
+                
+                  <button id="authorize_button" class="btn btn-outline-secondary" style="display: none;">Authorize</button>
+                  <button id="signout_button" class="btn btn-outline-secondary" style="display: none;">Sign Out</button>
+                  <ul id="task-list" class="list-unstyled">
+                  </ul>
+            </div>
+            <div class="col">
+            </div>
+            <div class="col">
+            </div>
+            <div class="col text-center content-section">
+                <h2 class="calling-text">GitHub</h2>
+    </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+    // Client ID and API key from the Developer Console
+    var CLIENT_ID = '142935902211-nsv3icsc30q6i3bkd8c2f3jo8ermnllb.apps.googleusercontent.com';
+    var API_KEY = 'AIzaSyC6Fbk-FdIYfxMalvdHEIIcJJaoQj3qZI0';
+
+    // Array of API discovery doc URLs for APIs used by the quickstart
+    var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest"];
+
+    // Authorization scopes required by the API; multiple scopes can be
+    // included, separated by spaces.
+    var SCOPES = "https://www.googleapis.com/auth/tasks";
+
+    var authorizeButton = document.getElementById('authorize_button');
+    var signoutButton = document.getElementById('signout_button');
+
+    /**
+     *  On load, called to load the auth2 library and API client library.
+     */
+    function handleClientLoad() {
+        gapi.load('client:auth2', initClient);
+    }
+
+    /**
+     *  Initializes the API client library and sets up sign-in state
+     *  listeners.
+     */
+    function initClient() {
+        gapi.client.init({
+            apiKey: API_KEY,
+            clientId: CLIENT_ID,
+            discoveryDocs: DISCOVERY_DOCS,
+            scope: SCOPES
+        }).then(function() {
+            // Listen for sign-in state changes.
+            gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+            // Handle the initial sign-in state.
+            updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+            authorizeButton.onclick = handleAuthClick;
+            signoutButton.onclick = handleSignoutClick;
+        }, function(error) {
+            appendPre(JSON.stringify(error, null, 2));
+        });
+    }
+
+    /**
+     *  Called when the signed in status changes, to update the UI
+     *  appropriately. After a sign-in, the API is called.
+     */
+    function updateSigninStatus(isSignedIn) {
+        if (isSignedIn) {
+            authorizeButton.style.display = 'none';
+            signoutButton.style.display = 'block';
+            listTaskLists();
+        } else {
+            authorizeButton.style.display = 'block';
+            signoutButton.style.display = 'none';
+        }
+    }
+
+    /**
+     *  Sign in the user upon button click.
+     */
+    function handleAuthClick(event) {
+        gapi.auth2.getAuthInstance().signIn();
+    }
+
+    /**
+     *  Sign out the user upon button click.
+     */
+    function handleSignoutClick(event) {
+        gapi.auth2.getAuthInstance().signOut();
+        var myNode = document.getElementById('content');
+        while (myNode.firstChild) {
+          myNode.removeChild(myNode.firstChild);
+        }
+    }
+
+    /**
+     * Append a pre element to the body containing the given message
+     * as its text node. Used to display the results of the API call.
+     *
+     * @param {string} message Text to be placed in pre element.
+     */
+    function appendPre(message) {
+        var pre = document.getElementById('content');
+        console.log(message);
+        var textContent = document.createTextNode(message + '\n');
+        pre.appendChild(textContent);
+    }
+
+    function appendUl(id,message){
+      $("#task-list").append('<li id="' +id+'" class="task-list-title"><h3>' + message+'</h3></li>');
+    }
+
+    function makeSingleTask(message){
+      var t = message;
+      return t;
+    }
+
+    /**
+     * Print task lists.
+     */
+    function listTaskLists() {
+        gapi.client.tasks.tasklists.list({
+            'maxResults': 10
+        }).then(function(response) {
+            var taskLists = response.result.items;
+            if (taskLists && taskLists.length > 0) {
+                for (var i = 0; i < taskLists.length; i++) {
+                    var taskList = taskLists[i];
+                    var tasks = ""; 
+                    //console.log(taskList);
+                    gapi.client.tasks.tasks.list({'tasklist':taskList.id})
+                    .then(function(response){
+                      var items =response.result.items;
+                      for (t in items){
+                        var current = items[t].title;
+                        console.log(current);
+                        tasks += "<li><img src='resources/ico/bulb-yellow.png' onmouseover='this.src=\"resources/ico/tick.png\";'' onmouseout='this.src=\"resources/ico/bulb-yellow.png\";'/>     " + current+ "</li>";
+                        console.log(tasks);
+                      }
+                      //appendUl(taskList.title + '    ' + tasks);
+                      appendUl(taskList.id,taskList.title);
+                      $('#'+taskList.id).append("<ul class='subtasks list-unstyled'><h5>" + tasks + "</h5></ul>");
+
+                    })
+                    //appendPre(taskList.title + ' (' + taskList.id + ')');
+                    //appendPre(taskList.title);
+
+                }
+            } else {
+                appendPre('No task lists found.');
+            }
+        });
+    }
+    </script>
+    <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()" onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+</body>
+
+</html>
